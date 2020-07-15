@@ -1,8 +1,14 @@
 package me.rainma22.Skywars;
 
-public class Main {
+import org.bukkit.plugin.java.JavaPlugin;
 
-    public static void main(String[] args) {
-	// write your code here
+public class Main extends JavaPlugin{
+    @Override
+    public void onEnable() {
+
+    }
+
+    @Override
+    public void onDisable() {
     }
 }
