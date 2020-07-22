@@ -39,8 +39,8 @@ class config{
             e.printStackTrace();
         }
     }
-    public Object load(String p){
-        return yaml.get(p);
+    public String load(String p){
+        return yaml.getString(p);
     }
     public void save(String p,String c){
         try {
