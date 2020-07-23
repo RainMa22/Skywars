@@ -13,7 +13,7 @@ public class configMan {
         plugin=p;
     }
     public void addConfig(String s){
-        configs.add(new config(new File(s)));
+        configs.add(new config(new File(plugin.getDataFolder(),s)));
     }
     public config getConfig(String s){
         for(config c:configs){
