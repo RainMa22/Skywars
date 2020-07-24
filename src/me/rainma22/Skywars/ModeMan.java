@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ModeMan {
@@ -135,6 +136,16 @@ class mode{
         for (String s1:s){
             maps.add(s1);
         }
+    }
+    public ItemStack[] getDrop(){
+        ArrayList<ItemStack> Itemfiller=new ArrayList<>(0);
+        int rand=(int)(Math.random()*100+1);
+        for (int i = 0; i < items.size(); i++) {
+            if (rand<=percentDrop.get(i)){
+                Itemfiller.add(items.get(i));
+            }
+        }
+        return (ItemStack[]) Itemfiller.toArray();
     }
 }
 }
