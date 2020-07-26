@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ModeMan {

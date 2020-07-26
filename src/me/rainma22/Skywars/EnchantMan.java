@@ -1,5 +1,6 @@
 package me.rainma22.Skywars;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -16,6 +17,8 @@ public class EnchantMan implements Listener {
     private ModeMan mode;
     private ArrayList<config> configs=new ArrayList<>(0);
     private ArrayList<Location> openedChests=new ArrayList<>(0);
+    private TimerThread tt;
+    public int RemainingSec;
     public EnchantMan(Main plu,ModeMan mod){
         plugin=plu;
         for (ModeMan.mode mo:mode.getMode()){
@@ -24,6 +27,9 @@ public class EnchantMan implements Listener {
         }
         mode=mod;
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
+        tt =new TimerThread(plugin,this);
+        RemainingSec=tt.Countdown;
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,tt);
     }
     public void resetOpened(){
         openedChests=new ArrayList<>(0);
