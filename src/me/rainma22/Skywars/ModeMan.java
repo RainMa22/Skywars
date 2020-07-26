@@ -89,7 +89,13 @@ class mode{
             if (c.load("amount")!=null) minMax=c.load("amounts").split(",");
             if((ss.length+s2.length+minMax.length)/3!=ss.length) throw new Exception("please have same amount of items and chancedrops!("+plugin.getDataFolder().toString()+","+configName+")");
             for(String s1:ss){
+                s1.replaceAll(" ","");
+                String[] sas=s1.split(":");
+                if (sas.length<2){
                 items.add(new ItemStack(Material.getMaterial(s1)));
+                }else {
+                    items.add(new ItemStack(Material.getMaterial(sas[0]),1, Short.parseShort(sas[1])));
+                }
             }
             for(String s1:s2){
                 percentDrop.add(Integer.parseInt(s1));
@@ -104,7 +110,7 @@ class mode{
     public String getName(){
         return name;
     }
-    public void additem(ItemStack item,int chance,int min,int max){
+    public void additem(ItemStack item,int chance,int min,int max,int damage){
         for (int i = 0; i < items.size(); i++) {
             if(items.get(i)==item){
                 percentDrop.set(i, chance);
@@ -121,7 +127,7 @@ class mode{
         c.save("chancedrops","");
         for (int i = 0; i < items.size(); i++) {
             if(i==0){
-                c.save("items",items.get(i).getType().name());
+                c.save("items",items.get(i).getType().name()+":"+damage);
                 c.save("chancedrops",Integer.toString(percentDrop.get(i)));
                 c.save("amount",(this.min.get(i)+"-"+this.max.get(i)));
             }else{
@@ -142,7 +148,8 @@ class mode{
         int rand=(int)(Math.random()*100+1);
         for (int i = 0; i < items.size(); i++) {
             if (rand<=percentDrop.get(i)){
-                Itemfiller.add(items.get(i));
+                int i1= (int)((max.get(i)-min.get(i))*Math.random());
+                Itemfiller.add(new ItemStack(items.get(i).getType(),i1));
             }
         }
         return (ItemStack[]) Itemfiller.toArray();
