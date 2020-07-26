@@ -14,7 +14,7 @@ import java.util.zip.ZipInputStream;
 public class Worldman {
     private Main plugin;
     private ArrayList<World> worlds=new ArrayList(0);
-    private ArrayList<File> templates=new ArrayList<>(0)
+    private ArrayList<File> templates=new ArrayList<>(0);
     public Worldman(Main plugin){
         this.plugin=plugin;
     }
