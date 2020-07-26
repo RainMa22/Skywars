@@ -38,6 +38,9 @@ public class ModeMan {
             }
         }
     }
+    public ArrayList<mode> getMode(){
+        return modes;
+    }
     public mode getMode(World w){
         String name=w.getName();
         for (map m:maps){
@@ -63,7 +66,7 @@ class map{
 }
 class mode{
     private String name,configName;
-    private ArrayList<ItemStack> items=new ArrayList<>(0);
+    public ArrayList<ItemStack> items=new ArrayList<>(0);
     private ArrayList<Integer> percentDrop=new ArrayList<>(0);
     private ArrayList<Integer> min=new ArrayList<>(0);
     private ArrayList<Integer> max=new ArrayList<>(0);
