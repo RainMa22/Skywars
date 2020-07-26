@@ -77,6 +77,14 @@ class mode{
         return maps;
     }
 
+    public void setMaps(ArrayList<String> maps) {
+        this.maps = maps;
+        c.save("maps",maps.get(0));
+        for (int i = 1; i < maps.size(); i++) {
+            c.save("maps",c.load("maps")+","+maps.get(i));
+        }
+    }
+
     public mode(Main p, String s) throws Exception {
         name=s;
         plugin=p;
