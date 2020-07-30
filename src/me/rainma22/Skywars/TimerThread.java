@@ -5,9 +5,9 @@ public class TimerThread implements Runnable{
     public boolean running=true;
     private EnchantMan enchantMan;
     public int Countdown;
-    public TimerThread(Main plugin, EnchantMan em){
+    public TimerThread(Main plugin){
         this.plugin=plugin;
-        enchantMan=em;
+        enchantMan=plugin.getEm();
         String configName="Skywars.yml";
         config c=plugin.getCm().getConfig(configName);
         if (c==null){
@@ -18,6 +18,11 @@ public class TimerThread implements Runnable{
             c.save("countdownTimeInSeconds","150");
         }
         Countdown=Integer.parseInt(c.load("countdownTimeInSeconds"));
+        for(ModeMan.mode mode:plugin.getMm().getMode())
+            mode.remainingSec=Countdown;
+    }
+    public void resetCount(ModeMan.mode m){
+        m.remainingSec=Countdown;
     }
     @Override
     public void run(){
@@ -25,10 +30,11 @@ public class TimerThread implements Runnable{
         while (running){
             try{
                 Thread.sleep(100);
-                enchantMan.RemainingSec--;
-                if (enchantMan.RemainingSec<=0){
-                    enchantMan.RemainingSec=Countdown;
-                    enchantMan.resetOpened();
+                for(ModeMan.mode mode:plugin.getMm().getMode()){
+                    mode.remainingSec--;
+                    if (mode.remainingSec<=0){
+                        enchantMan.resetOpened(mode.getName());
+                    }
                 }
             }catch (InterruptedException ie){}
         }

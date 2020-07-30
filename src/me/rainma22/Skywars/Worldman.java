@@ -17,6 +17,7 @@ public class Worldman {
     private ArrayList<File> templates=new ArrayList<>(0);
     public Worldman(Main plugin){
         this.plugin=plugin;
+        loadWorld();
     }
     public void genNewWorld(String name){
         new Thread(new Runnable() {
@@ -47,7 +48,6 @@ public class Worldman {
                 mode.loadmaps();
             }
         }
-        String configName="worlds.yml";
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -55,18 +55,48 @@ public class Worldman {
                 f.mkdirs();
                 if (!source.toLowerCase().endsWith(".zip"))source.concat(".zip");
                 f=new File(f,source);
+                if (!f.exists())f=new File(source);
                 try {
                     ZipInputStream zipIn= new ZipInputStream(new FileInputStream(f));
-                    File f2=new File(Bukkit.getWorldContainer(),"name");
+                    File f2=new File(Bukkit.getWorldContainer(),name);
                     f2.mkdirs();
                     OutputStreamWriter out= new OutputStreamWriter(new FileOutputStream(f2));
                     int i=-1;
                     while ((i=zipIn.read())!=-1){
                         out.write(i);
                     }
+                    saveWorld(source,name);
                 } catch (IOException e) {
                 }
             }
         }).start();
+    }
+    public void saveWorld(String source,String name){
+        String configName="worlds.yml";
+        config c=plugin.getCm().getConfig(configName);
+        ArrayList<String> strings=new ArrayList<>(0);
+        for (String s:c.load("worlds").split(",")){
+            String[] s1=s.split(",");
+            if (s1[0]==name){
+                s1[1]=source;
+                strings.add(s1[0]+" "+s1[1]);
+            }else{
+                strings.add(s);
+            }
+        }
+        c.save("worlds",strings.get(0));
+        for (int i = 1; i < strings.size(); i++) {
+            c.save("worlds",c.load("worlds")+","+strings.get(i));
+        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,this::loadWorld);
+    }
+    public void loadWorld(){
+        String configName="worlds.yml";
+        config c=plugin.getCm().getConfig(configName);
+        for (String s:c.load("worlds").split(",")){
+            String[] s1=s.split(" ");
+            worlds.add(Bukkit.getWorld(s1[0]));
+            templates.add(new File(s1[1]));
+    }
     }
 }

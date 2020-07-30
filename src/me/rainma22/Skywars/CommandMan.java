@@ -13,11 +13,16 @@ public class CommandMan implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if(command.getName().equalsIgnoreCase("addSkywarsMap")){
             switch (args.length){
-                case 2:
-                case 1:
-                case 0:
-                    sender.sendMessage("Usage: /addSkywarsMap <mode> <mapname> <ZipFile>\nGenerate a world from a ZipFile as an Template");
+                case 3:
+                    plugin.getWm().saveWorldFromTemplate(args[2],args[1],args[0]);
                     break;
+                default:
+                    sender.sendMessage("Usage: /addSkywarsMap <mapname> <mode> <ZipFile>\nGenerate a world from a ZipFile as an Template");
+                    break;
+            }
+        }else if (command.getName().equalsIgnoreCase("start")){
+            switch (args.length) {
+                case 1:
             }
         }
         return false;

@@ -72,6 +72,7 @@ class mode{
     private ArrayList<String> maps=new ArrayList(0);
     private Main plugin;
     private config c;
+    public int remainingSec;
 
     public ArrayList<String> getMaps() {
         return maps;

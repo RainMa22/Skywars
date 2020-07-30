@@ -17,8 +17,7 @@ public class EnchantMan implements Listener {
     private ModeMan mode;
     private ArrayList<config> configs=new ArrayList<>(0);
     private ArrayList<Location> openedChests=new ArrayList<>(0);
-    private TimerThread tt;
-    public int RemainingSec;
+    public TimerThread tt;
     public EnchantMan(Main plu,ModeMan mod){
         plugin=plu;
         for (ModeMan.mode mo:mode.getMode()){
@@ -27,12 +26,14 @@ public class EnchantMan implements Listener {
         }
         mode=mod;
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
-        tt =new TimerThread(plugin,this);
-        RemainingSec=tt.Countdown;
-        Bukkit.getScheduler().runTaskAsynchronously(plugin,tt);
+        tt=new TimerThread(plugin);
     }
-    public void resetOpened(){
-        openedChests=new ArrayList<>(0);
+    public void resetOpened(String m){
+        for (Location l:openedChests) {
+            if (mode.getMode(l.getWorld()).getName().equalsIgnoreCase(m)){
+                openedChests.remove(l);
+            }
+        }
     }
     public void addEnchantment(ItemStack item,String modeName,Enchantment e,int level,int chance){
         ArrayList<ModeMan.mode> modes=mode.getMode();

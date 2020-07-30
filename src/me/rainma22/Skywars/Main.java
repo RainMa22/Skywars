@@ -15,7 +15,6 @@ public class Main extends JavaPlugin{
     public Worldman getWm() {
         return wm;
     }
-
     @Override
     public void onEnable() {
         cm= new configMan(this);
