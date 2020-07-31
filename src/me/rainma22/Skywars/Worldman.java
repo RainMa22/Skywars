@@ -1,10 +1,7 @@
 package me.rainma22.Skywars;
 
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.libs.org.ibex.nestedvm.util.Seekable;
 
 import java.io.*;
@@ -13,8 +10,10 @@ import java.util.zip.ZipInputStream;
 
 public class Worldman {
     private Main plugin;
-    private ArrayList<World> worlds=new ArrayList(0);
+    public ArrayList<World> worlds=new ArrayList(0);
     private ArrayList<File> templates=new ArrayList<>(0);
+    public ArrayList<Integer> refillTimes=new ArrayList<>(0);
+    public ArrayList<Location> chestOpened=new ArrayList<>(0);
     public Worldman(Main plugin){
         this.plugin=plugin;
         loadWorld();
@@ -97,6 +96,8 @@ public class Worldman {
             String[] s1=s.split(" ");
             worlds.add(Bukkit.getWorld(s1[0]));
             templates.add(new File(s1[1]));
+            refillTimes.add(0);
+
     }
     }
 }
