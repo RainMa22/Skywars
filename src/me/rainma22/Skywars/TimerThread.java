@@ -45,11 +45,13 @@ public class TimerThread implements Runnable{
             try{
                 Thread.sleep(100);
                 for (int i = 0; i < worldman.worlds.size(); i++) {
+                    if (worldman.isRunning.get(i)){
                     Integer integer=worldman.refillTimes.get(i);
                     integer--;
                     if (integer==0){
                         this.resetCount(worldman.worlds.get(i).getName());
                     }
+                }
                 }
             }catch (InterruptedException ie){}
         }

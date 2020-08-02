@@ -34,7 +34,7 @@ public class EnchantMan implements Listener {
                 String configname="modes/"+mode1.getName()+"/enchants.yml";
                 config c=plugin.getCm().getConfig(configname);
                 c.save(item.getType().toString(),c.load(item.getType().toString())+","+e.getName()+" "+level);
-                c.save(item.getType().toString(),c.load(item.getType().toString()+","+chance));
+                c.save(item.getType().toString()+".chance",c.load(item.getType().toString()+".chance")+","+chance);
             }
         }
     }
@@ -50,7 +50,7 @@ public class EnchantMan implements Listener {
                       String s=conf.load(is.getType().toString());
                       String s1=conf.load(is.getType().toString()+".chance");
                       String[] sa=s.toUpperCase().split(",");
-                      String[] ca=s.split(",");
+                      String[] ca=s1.split(",");
                       if (s!=null&&s1!=null&&sa.length==ca.length){
                           int rand=(int)(Math.random()*100+1);
                           for (int i = 0; i < sa.length; i++) {

@@ -65,7 +65,7 @@ class map{
 }
 class mode{
     private String name,configName;
-    public ArrayList<ItemStack> items=new ArrayList<>(0);
+    private ArrayList<ItemStack> items=new ArrayList<>(0);
     private ArrayList<Integer> percentDrop=new ArrayList<>(0);
     private ArrayList<Integer> min=new ArrayList<>(0);
     private ArrayList<Integer> max=new ArrayList<>(0);

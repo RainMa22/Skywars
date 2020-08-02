@@ -14,6 +14,7 @@ public class Worldman {
     private ArrayList<File> templates=new ArrayList<>(0);
     public ArrayList<Integer> refillTimes=new ArrayList<>(0);
     public ArrayList<Location> chestOpened=new ArrayList<>(0);
+    public ArrayList<Boolean> isRunning=new ArrayList<>(0);
     public Worldman(Main plugin){
         this.plugin=plugin;
         loadWorld();
@@ -97,7 +98,7 @@ public class Worldman {
             worlds.add(Bukkit.getWorld(s1[0]));
             templates.add(new File(s1[1]));
             refillTimes.add(0);
-
+            isRunning.add(false);
     }
     }
 }
