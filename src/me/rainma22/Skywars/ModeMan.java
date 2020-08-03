@@ -1,8 +1,10 @@
 package me.rainma22.Skywars;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Step;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ public class ModeMan {
     private Main plugin;
     private ArrayList<mode> modes= new ArrayList<>(0);
     private ArrayList<map> maps=new ArrayList<>(0);
+    private String configname="modes.yml";
     public ModeMan(Main p){
         plugin=p;
         try {
@@ -21,6 +24,7 @@ public class ModeMan {
         }
     }
     public void getModes() throws Exception {
+        modes.clear();
         if(plugin.getCm().getConfig("modes.yml")==null) plugin.getCm().addConfig("modes.yml");
         config c=plugin.getCm().getConfig("modes.yml");
         if(c.load("modes")!=null) {
@@ -29,6 +33,19 @@ public class ModeMan {
                 modes.add(new mode(plugin,ss));
             }
         }
+    }
+    public boolean addMode(String mode) throws Exception {
+        ModeMan.mode mode1=new ModeMan.mode(plugin,mode);
+        for (ModeMan.mode mode2:modes){
+            if (mode2.getName().equalsIgnoreCase(mode)) return false;
+        }
+        modes.add(mode1);
+        config c=plugin.getCm().getConfig(configname);
+        c.save("modes",modes.get(0).getName());
+        for (int i = 1; i < modes.size(); i++) {
+            c.save("modes",c.load("modes").concat(",").concat(modes.get(i).getName()));
+        }
+        return true;
     }
     public void loadMaps(){
         for(mode m:modes){
@@ -49,9 +66,24 @@ public class ModeMan {
         }
         return null;
     }
+    public boolean addmap(String modename,String worldname){
+        for (map map:maps){
+            if (map.getName().equalsIgnoreCase(worldname)){
+                map.mode.removeMap(worldname);
+                break;
+            }
+        }
+        for (mode mode:modes){
+            if (mode.getName()==modename){
+                mode.addMap(worldname);
+                return true;
+            }
+        }
+        return false;
+    }
 class map{
     private String name;
-    private mode mode;
+    public mode mode;
 
     public String getName() {
         return name;
@@ -119,6 +151,22 @@ class mode{
     public String getName(){
         return name;
     }
+    public void addMap(String worldname){
+        if (Bukkit.getWorld(worldname)==null)plugin.getWm().genNewWorld(worldname);
+        c.save("maps",c.load("maps").concat(",").concat(worldname));
+        loadmaps();
+        plugin.getMm().loadMaps();
+    }
+    public boolean removeMap(String worldname){
+        boolean b= maps.remove(worldname);
+        c.save("maps",maps.get(0));
+        for (int i = 1; i < maps.size(); i++) {
+            c.save("maps",c.load("maps").concat(",").concat(maps.get(i)));
+        }
+        loadmaps();
+        plugin.getMm().loadMaps();
+        return b;
+    }
     public void additem(ItemStack item,int chance,int min,int max,int damage){
         for (int i = 0; i < items.size(); i++) {
             if(items.get(i)==item){
@@ -147,6 +195,7 @@ class mode{
         }
     }
     public void loadmaps(){
+        maps=new ArrayList<>(0);
         String[] s=c.load("maps").split(",");
         for (String s1:s){
             maps.add(s1);

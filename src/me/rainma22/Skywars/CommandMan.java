@@ -24,6 +24,7 @@ public class CommandMan implements CommandExecutor {
                     sender.sendMessage("Usage: /addSkywarsMap <mapname> <mode> <ZipFile>\nGenerate a world from a ZipFile as an Template");
                     break;
             }
+            return true;
         }else if (command.getName().equalsIgnoreCase("start")){
             switch (args.length) {
                 case 1:
@@ -38,6 +39,7 @@ public class CommandMan implements CommandExecutor {
                     sender.sendMessage("Usage: /start <worldname>");
                     break;
             }
+            return true;
         }else if (command.getName().equalsIgnoreCase("addSkywarsEnchantment")){
             switch (args.length){
                 case 5:
@@ -53,8 +55,37 @@ public class CommandMan implements CommandExecutor {
                             "<Enchantment level> <chance>");
                     break;
             }
-        }else if (command.getName().equalsIgnoreCase("")){
-
+            return true;
+        }else if (command.getName().equalsIgnoreCase("addMap")){
+            switch (args.length){
+                case 2:
+                    if(!plugin.getMm().addmap(args[0],args[1])){
+                        sender.sendMessage(ChatColor.DARK_RED+"Error!\n"+
+                                "no such mode called "+args[0]+"!");
+                    }else{
+                        sender.sendMessage(ChatColor.GREEN+"Sucess!");
+                    }
+                    break;
+                default:
+                    sender.sendMessage("Usage: /addMap <Modename> <worldname>\n"+
+                            ChatColor.DARK_RED+"Warning: Not case sensitive");
+                    break;
+            }
+            return true;
+        }else if (command.getName().equalsIgnoreCase("addMode")){
+            switch (args.length){
+                case 1:
+                    try {
+                        if (plugin.getMm().addMode(args[0])){
+                            sender.sendMessage("Sucess!");
+                        }else{
+                            sender.sendMessage(ChatColor.DARK_RED+"Error!\n"+
+                                    "Mode "+args[0]+" already exists!");
+                        }
+                    } catch (Exception e) {
+                    }
+            }
+            return true;
         }
         return false;
     }

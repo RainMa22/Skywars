@@ -6,6 +6,8 @@ import org.bukkit.craftbukkit.libs.org.ibex.nestedvm.util.Seekable;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class Worldman {
@@ -33,22 +35,8 @@ public class Worldman {
     }
     public void saveWorldFromTemplate(String source,String Modename,String name){
 
-        for ( ModeMan.mode mode:plugin.getMm().getMode() ) {
-            String configName="modes/"+mode.getName()+".yml";
-            config c=plugin.getCm().getConfig(configName);
-            ArrayList<String> map=new ArrayList<>(0);
-            for (String s2:c.load("maps").split(",")){
-                if (name!=s2){
-                    map.add(s2);
-                }
-            }
-            if (mode.getName()==Modename){
-
-                c.save("maps",c.load("maps")+","+name);
-                mode.loadmaps();
-            }
-        }
-        new Thread(new Runnable() {
+       plugin.getMm().addmap(Modename,name);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,new Runnable() {
             @Override
             public void run() {
                 File f=new File(plugin.getDataFolder(),"templates");
@@ -58,18 +46,27 @@ public class Worldman {
                 if (!f.exists())f=new File(source);
                 try {
                     ZipInputStream zipIn= new ZipInputStream(new FileInputStream(f));
+                    ZipEntry entry=null;
+                    ZipFile zipFile=new ZipFile(f);
                     File f2=new File(Bukkit.getWorldContainer(),name);
                     f2.mkdirs();
-                    OutputStreamWriter out= new OutputStreamWriter(new FileOutputStream(f2));
-                    int i=-1;
-                    while ((i=zipIn.read())!=-1){
-                        out.write(i);
+                    while ((entry= zipIn.getNextEntry())!=null){
+                        File file=new File(f2,entry.getName());
+                        FileOutputStream out=new FileOutputStream(file);
+                        InputStream input=zipFile.getInputStream(entry);
+                        int i=-1;
+                        while ((i=input.read())!=-1){
+                            out.write(i);
+                        }
+                        out.close();
+                        input.close();
                     }
                     saveWorld(source,name);
+                    zipIn.close();
                 } catch (IOException e) {
                 }
             }
-        }).start();
+        });
     }
     public void saveWorld(String source,String name){
         String configName="worlds.yml";
