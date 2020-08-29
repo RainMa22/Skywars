@@ -43,7 +43,7 @@ public class TimerThread implements Runnable{
     public void run(){
         while (running){
             try{
-                Thread.sleep(100);
+                Thread.sleep(1000);
                 for (int i = 0; i < worldman.worlds.size(); i++) {
                     if (worldman.isRunning.get(i)){
                     Integer integer=worldman.refillTimes.get(i);

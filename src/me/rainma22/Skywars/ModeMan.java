@@ -104,6 +104,7 @@ class mode{
     private ArrayList<String> maps=new ArrayList(0);
     private Main plugin;
     private config c;
+    private byte maxPlayer=0;
     public ArrayList<String> getMaps() {
         return maps;
     }
@@ -122,6 +123,8 @@ class mode{
         configName="modes/"+name+".yml";
         if(plugin.getCm().getConfig(configName)==null) plugin.getCm().addConfig(configName);
         c=plugin.getCm().getConfig(configName);
+        if (c.load("maxPlayer")==null)c.save("maxPlayer","12");
+        maxPlayer=Byte.parseByte(c.load("maxPlayer"));
         if(c.load("items")!=null){
             String[] ss=c.load("items").toUpperCase().split(",");
             String[] s2=new String[0];

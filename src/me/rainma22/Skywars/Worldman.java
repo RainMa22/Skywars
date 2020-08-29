@@ -3,6 +3,7 @@ package me.rainma22.Skywars;
 
 import org.bukkit.*;
 import org.bukkit.craftbukkit.libs.org.ibex.nestedvm.util.Seekable;
+import org.bukkit.entity.Player;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,10 +14,11 @@ import java.util.zip.ZipInputStream;
 public class Worldman {
     private Main plugin;
     public ArrayList<World> worlds=new ArrayList(0);
-    private ArrayList<File> templates=new ArrayList<>(0);
+    public ArrayList<File> templates=new ArrayList<>(0);
     public ArrayList<Integer> refillTimes=new ArrayList<>(0);
     public ArrayList<Location> chestOpened=new ArrayList<>(0);
     public ArrayList<Boolean> isRunning=new ArrayList<>(0);
+    public ArrayList<GameThread> games=new ArrayList<>(0);
     public Worldman(Main plugin){
         this.plugin=plugin;
         loadWorld();
@@ -96,6 +98,7 @@ public class Worldman {
             templates.add(new File(s1[1]));
             refillTimes.add(0);
             isRunning.add(false);
+            games.add(new GameThread(plugin,Bukkit.getWorld(s1[0])));
     }
     }
 }
